@@ -7,7 +7,7 @@ def ParseArgs():
 
     parser.add_argument('-t', help='target directory', type=str, default=os.getcwd())
     parser.add_argument('-o', help='output directory', type=str, default=os.getcwd())
-    parser.add_argument('-n', help='output file name', type=str, default=os.getcwd())
+    parser.add_argument('-n', help='output file name', type=str, default='merged')
 
     return parser.parse_args()
 
@@ -19,22 +19,23 @@ def OrderFiles(f_list ,ord_by, direction):
 
 def GetAllPdfs(folder, ord_by="name", desc=False):
     
-    files = []
-
+    pdf_list = []
     for path, NotImplemented, files in os.walk(folder):
         for file in files:
             if file[-4:] == '.pdf':
                 file_path = os.path.join(path, file)
-                files.append(file_path)
+                print(f'File found: {file}')
+                pdf_list.append(file_path)
     
     #files = OrderFiles(parameter1, parameter2)
 
-    return files
+    return pdf_list
 
 def merge_pdf(target, output, name):
 
     files = GetAllPdfs(target)
 
+    print(f'Merging {len(files)} files...')
     merger = PyPDF2.PdfMerger()
     for file in files:
         merger.append(file)
